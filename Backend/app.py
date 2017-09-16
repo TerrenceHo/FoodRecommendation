@@ -6,7 +6,7 @@ from flask_httpauth import HTTPBasicAuth
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 if os.environ.get("DATABASE_URL") is None:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/food_recommendation'
 else:
@@ -82,5 +82,8 @@ def home():
 if __name__ == '__main__':
     db.create_all()
 
-    port = int(os.environ.get("PORT", 5000))
-    app.run(debug=True, port=port)
+    port_num = os.environ["PORT"]
+    if port_num is None:
+        app.run(debug=True, port=5000)
+    else:
+        app.run(port=port_num)
