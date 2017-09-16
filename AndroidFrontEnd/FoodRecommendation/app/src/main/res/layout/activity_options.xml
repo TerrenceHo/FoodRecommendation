@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.nilay.foodrecommendation.Options">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Options"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        tools:layout_editor_absoluteX="91dp"
+        tools:layout_editor_absoluteY="77dp" />
+
+    <Spinner
+        android:id="@+id/priceSpinner"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="237dp"
+        tools:layout_editor_absoluteY="77dp" />
+
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distance"
+        tools:layout_editor_absoluteX="91dp"
+        tools:layout_editor_absoluteY="145dp" />
+
+    <Spinner
+        android:id="@+id/distanceSpinner"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="237dp"
+        tools:layout_editor_absoluteY="145dp" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time"
+        tools:layout_editor_absoluteX="91dp"
+        tools:layout_editor_absoluteY="215dp" />
+
+    <Spinner
+        android:id="@+id/timeSpinner"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="237dp"
+        tools:layout_editor_absoluteY="215dp" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="I'm feeling..."
+        tools:layout_editor_absoluteX="91dp"
+        tools:layout_editor_absoluteY="288dp" />
+
+    <Spinner
+        android:id="@+id/feelsSpinner"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="237dp"
+        tools:layout_editor_absoluteY="288dp" />
+
+    <Button
+        android:id="@+id/find"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Find Me Food!"
+        tools:layout_editor_absoluteX="132dp"
+        tools:layout_editor_absoluteY="389dp" />
+</android.support.constraint.ConstraintLayout>

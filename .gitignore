@@ -228,3 +228,6 @@ $RECYCLE.BIN/
 /*.gcno
 
 # End of https://www.gitignore.io/api/macos,swift,xcode,python,windows
+
+# Any json file
+*.json
