@@ -35,7 +35,28 @@ def create_user():
     user = User(name)
     db.session.add(user)
     db.session.commit()
-    return jsonify({"id":user.id})
+
+    user_dict = {
+        "id":user.id,
+        "name":user.name,
+        "tf_path":user.tf_path
+    }
+    return jsonify({"user":user_dict})
+
+@app.route('/api/v1/user', methods=['PUT'])
+def update_user():
+    ID = request.json["user"]["id"]
+    user = User.query.filter_by(id=ID).first()
+    user.name = request.json["user"]["name"]
+    user.tf_path = request.json["user"]["tf_path"]
+    db.session.commit()
+
+    user_dict = {
+        "id":user.id,
+        "name":user.name,
+        "tf_path":user.tf_path
+    }
+    return jsonify({"user":user_dict})
 
 @app.route('/api/v1/user', methods=['DELETE'])
 def delete_user():
