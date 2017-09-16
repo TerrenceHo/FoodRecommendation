@@ -10,7 +10,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 if os.environ.get("DATABASE_URL") is None:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/food_recommendation'
 else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = urlparse.urlparse(os.environ["DATABASE_URL"])
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
 db = SQLAlchemy(app)
 
 auth = HTTPBasicAuth()
