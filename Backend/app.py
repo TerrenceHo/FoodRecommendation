@@ -1,10 +1,16 @@
+import os
+import urlparse
+
 from flask import Flask, jsonify, abort, make_response, request, url_for
 from flask_httpauth import HTTPBasicAuth
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/food_recommendation'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+if os.environ.get("DATABASE_URL") is None:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/food_recommendation'
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
 db = SQLAlchemy(app)
 
 auth = HTTPBasicAuth()
@@ -69,7 +75,15 @@ def delete_user():
 
 
 
+@app.route('/')
+def home():
+    return "App Running"
 
 if __name__ == '__main__':
     db.create_all()
-    app.run(debug=True)
+
+    port_num = os.environ["PORT"]
+    if port_num is None:
+        app.run(debug=True, port=5000)
+    else:
+        app.run(debug=False, host='0.0.0.0', port=port_num)
