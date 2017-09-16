@@ -86,4 +86,4 @@ if __name__ == '__main__':
     if port_num is None:
         app.run(debug=True, port=5000)
     else:
-        app.run(port=port_num)
+        app.run(debug=False, host='0.0.0.0', port=port_num)
