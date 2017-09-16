@@ -1,8 +1,11 @@
 import os
+from shutil import copyfile
 
 from flask import Flask, jsonify, abort, make_response, request, url_for
 from flask_httpauth import HTTPBasicAuth
 from flask_sqlalchemy import SQLAlchemy
+
+BaseModel = "Backend/models/BaseModel"
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -27,7 +30,7 @@ class User(db.Model):
         self.tf_path = ''
 
     def create_path(self, ID):
-        self.tf_path = 'models/' + self.firstname + self.lastname + str(ID)
+        self.tf_path = 'Backend/models/' + self.firstname + self.lastname + str(ID)
 
 @app.route('/api/v1/user/<int:user_id>', methods=['GET'])
 def get_user(user_id):
@@ -52,6 +55,8 @@ def create_user():
     db.session.add(user)
     db.session.commit()
 
+    copyfile(BaseModel, user.tf_path)
+
     user_dict = {
         "id":user.id,
         "firstname":user.firstname,
@@ -68,6 +73,7 @@ def update_user():
     user.lastname = request.json["user"]["lastname"]
     user.create_path(user.id)
     db.session.commit()
+
 
     user_dict = {
         "id":user.id,
@@ -93,7 +99,6 @@ def train():
     # function that takes in the path to model trained for that user,
     # and uses it to train using other queries.
     model = learning_models.train(user.tf_path)
-
 
 @app.route('/')
 def home():
