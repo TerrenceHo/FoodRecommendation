@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.nilay.foodrecommendation.Profile">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Let's build your profile"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/priceRange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Preferred Price Range: "
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        tools:layout_editor_absoluteX="31dp"
+        tools:layout_editor_absoluteY="77dp" />
+
+    <Spinner
+        android:id="@+id/priceRangeSpinner"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="242dp"
+        tools:layout_editor_absoluteY="134dp" />
+
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Maximum Range:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        tools:layout_editor_absoluteX="31dp"
+        tools:layout_editor_absoluteY="134dp" />
+
+    <Spinner
+        android:id="@+id/rangeSpinner"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="242dp"
+        tools:layout_editor_absoluteY="77dp" />
+
+    <TextView
+        android:id="@+id/favoriteMeal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Favorite Meal:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        tools:layout_editor_absoluteX="31dp"
+        tools:layout_editor_absoluteY="189dp" />
+
+    <Spinner
+        android:id="@+id/favoriteMealSpinner"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="242dp"
+        tools:layout_editor_absoluteY="189dp" />
+
+    <TextView
+        android:id="@+id/cuisines"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Favorite Cuisines:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        tools:layout_editor_absoluteX="31dp"
+        tools:layout_editor_absoluteY="246dp" />
+
+    <Spinner
+        android:id="@+id/spinner6"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="242dp"
+        tools:layout_editor_absoluteY="243dp" />
+
+    <Button
+        android:id="@+id/finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Finish"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="423dp" />
+
+</android.support.constraint.ConstraintLayout>

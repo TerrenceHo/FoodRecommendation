@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="price_array">
+        <item>$</item>
+        <item>$$</item>
+        <item>$$$</item>
+        <item>$$$$</item>
+    </string-array>
+
+    <string-array name="distance_array">
+        <item>2 miles</item>
+        <item>5 miles</item>
+        <item>10 miles</item>
+        <item>15 miles</item>
+        <item>25 miles</item>
+        <item>25+ miles</item>
+    </string-array>
+
+    <string-array name="time_array">
+        <item>Now</item>
+        <item>1 hr from now</item>
+        <item>2 hrs from now</item>
+        <item>3 hrs from now</item>
+    </string-array>
+
+    <string-array name="feels_array">
+
+    </string-array>
+</resources>
