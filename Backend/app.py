@@ -74,6 +74,9 @@ def delete_user():
 
 
 
+@app.route('/')
+def home():
+    return "App Running"
 
 if __name__ == '__main__':
     db.create_all()
