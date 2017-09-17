@@ -60,6 +60,41 @@ public class Options extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int price;
+                int distance;
+                int time;
+                String cuisine;
+
+                // int for price
+                Spinner p = (Spinner) findViewById(R.id.priceSpinner);
+                price = p.getSelectedItem().toString().length();
+                // int for distance
+                Spinner d = (Spinner) findViewById(R.id.distanceSpinner);
+                String sDistance = d.getSelectedItem().toString();
+                if(sDistance.length() == 9)
+                    distance = 24;
+                else {
+                    String ssDistance = sDistance.substring(0,2);
+                    if(ssDistance.equals("1 "))
+                        distance = 1;
+                    else if(ssDistance.equals("5 "))
+                        distance = 5;
+                    else
+                        distance = Integer.parseInt(ssDistance);
+                }
+                // int for time
+                Spinner t = (Spinner) findViewById(R.id.timeSpinner);
+                String sTime = t.getSelectedItem().toString();
+                if(sTime.equals("1 hr from now"))
+                    time = 1;
+                else if(sTime.equals("2 hrs from now"))
+                    time = 2;
+                else if(sTime.equals("3 hrs from now"))
+                    time = 3;
+                // string for cuisine
+                Spinner f = (Spinner) findViewById(R.id.feelsSpinner);
+                cuisine = f.getSelectedItem().toString();
+
                 startActivity(new Intent(Options.this, Dashboard.class));
             }
         });

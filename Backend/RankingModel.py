@@ -19,14 +19,13 @@ from pprint import pprint
 
 APIKEY = ["eb3ef3ed91484343e952b92c1a9a626f"]
 validKeys = ["021f7c05ee9f665a3661b8e8b5ade5b4", "66b9ba98643878c90ceca5562236fb86", "1577d3dd8d8b5c7d0b1e5bc5892696c2", "4197a02f11307b726dc4b808a66f316f", "6962b9046e25b8ec8df6c4eaa217b1a6", "4ab5541298fc6740c430e7759bd15d99", "c1d1bc9d4fea4ce5c41482488c0bdc83", "6dbd256a23390a7df501c15bf2a082ad", "aaabf864d2828df6c03f4778ece6a180", "99edda14ed75fda14b5fd5896531fb50", "054510a8e612e6dbcae38272e1d30585", "b2fe2d9f8f52ebe38264dcc56ff8716d", "7d275af62ba3f3ba4b7db34e04cc242d", "a24116cbc0a89daefeb0ba45f7d57249", "8389f312b8c53950fa647c26f3b85bba", "c2110c5b434d840a6481f09a7fab2900", "58174b108c884e285f82ad10c3d876ad", "549d5e031d67e3cc9c635548a9aff9c5", "139eb3f37902443ebf59841aa70caa0d", "57bf0edc2491633a3de14d07d9b75148"]
-def trainAndCreateGenericModel(savePath, numEpochs=100, batchSize=400, numSampleQueries=150, learningRate=0.001, restoreVars=False, restorePath=None):
+def trainAndCreateGenericModel(savePath, numEpochs=100, batchSize=400, numSampleQueries=150, learningRate=0.002, restoreVars=False, restorePath=None):
     #Generate Random queries
     queries = genRandomQueries(numSampleQueries)
     #Generate corresponding retreived restaurants
     restDicts = []
     for query in queries:
         restDicts.append(queryAccept(query))
-    print(restDicts)
     genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learningRate, restoreVars, restorePath)
     print("Finsihed Training")
     return None
@@ -34,14 +33,15 @@ def trainAndCreateGenericModel(savePath, numEpochs=100, batchSize=400, numSample
 queryCuisineDict = {"American" : 0, "Italian": 1, "Japanese": 2, "Chinese": 3, "Fast Food": 4, "French": 5, "Mediterranean": 6, "Mexican":7, "Thai":8, "Vietnamese":9, "Indian":10, "Other": 12}
 distanceOptions = {"1":0, "5":1, "10":2, "15":3, "20":4, "20+":5}
 
-def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learningRate = 0.001, restoreVars=False, restorePath=None):
+def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learningRate = 0.002, restoreVars=False, restorePath=None):
 
     #Get input tensors from raw data
     numBatches, wideInputFeatures, deepInputFeatures = genInputFeatures(queries, restDicts, batchSize=batchSize)
     #TODO: Figure out format of answers
     answers = makeAnswers(restDicts, batchSize)
     answers = np.array(answers)
-    print(answers.shape)
+    deepInputFeatures = np.array(deepInputFeatures)
+    wideInputFeatures = np.array(wideInputFeatures)
 
     #Define tf model:
     wideFeatures = tf.placeholder(tf.float32, shape=[None, 3])
@@ -63,8 +63,8 @@ def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learning
     deepLayer3 = tf.nn.relu(tf.matmul(deepLayer2, deepW3) + deepB3)
     fc_layer = tf.concat([deepLayer3, wideFeatures], 1)
     readout = tf.matmul(fc_layer, fc_W) + fc_B
-    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=readout))
-
+    #loss = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=readout))
+    loss = tf.reduce_mean(tf.squared_difference(readout, y))
     trainer = tf.train.AdamOptimizer(learningRate).minimize(loss)
     saver = tf.train.Saver()
     restorer = tf.train.Saver()
@@ -77,8 +77,13 @@ def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learning
         for e in range(numEpochs):
             lossForEpoch = 0
             for i in range(numBatches):
-                _, l = sess.run([trainer, loss], feed_dict={deepFeatures : deepInputFeatures[i], wideFeatures: wideInputFeatures[i], y:answers[i]})
+                #print(deepInputFeatures[i])
+                #print(wideFeatures[i])
+                #print(answers[i])
+                _,r, l = sess.run([trainer,readout, loss], feed_dict={deepFeatures : deepInputFeatures[i], wideFeatures: wideInputFeatures[i], y:answers[i]})
                 lossForEpoch += l
+                print(r)
+                print(answers[i])
             if e % 5 ==0 and e > 0:
                 APIKEY.append(validKeys[e/5])
             if e % 10 ==0:
@@ -112,8 +117,8 @@ def returnTopThree(modelPath, query):
     deepLayer3 = tf.nn.relu(tf.matmul(deepLayer2, deepW3) + deepB3)
     fc_layer = tf.concat([deepLayer3, wideFeatures], 1)
     readout = tf.matmul(fc_layer, fc_W) + fc_B
-    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=readout))
-
+    #loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=readout))
+    loss = tf.reduce_mean(tf.squared_difference(readout, y))
     trainer = tf.train.AdamOptimizer(learningRate).minimize(loss)
     restorer = tf.train.Saver()
 
@@ -154,7 +159,6 @@ def genDeepFeatures(query, rest):
     priceRange[query["price"] - 1] = 1
     queryCuisine = [0,0,0,0,0,0,0,0,0,0,0,0]
     queryCuisine[queryCuisineDict[query["cuisine"]]] = 1
-    print((rest))
     rating = [(float(rest["restaurant"]["user_rating"]["aggregate_rating"]) -2.5) / 2.5]
     distance = [0,0,0,0,0,0]
     distance[distanceOptions[query["distance"]]] = 1
@@ -205,7 +209,7 @@ def makeAnswers(restDicts, batchSize):
         popularityRatings = []
         for rest in retreivedRests:
             rating = [(float(rest["restaurant"]["user_rating"]["aggregate_rating"]) -2.5) / 2.5]
-            popularityRatings.append(rating * int(rest["restaurant"]["user_rating"]["votes"]))
+            popularityRatings.append(rating[0] * int(rest["restaurant"]["user_rating"]["votes"]))
         popularityRatings = np.array(popularityRatings)
         bestIndices = popularityRatings.argsort()[-3:][::-1]
         answer = [[0] for i in range(len(retreivedRests))]
@@ -265,10 +269,7 @@ def genRandomQueries(amount):
         queries.append(testDict)
     return queries
 
-from zomato import Zomato
-import urllib2
-import json
-from pprint import pprint
+
 
 def cuisineTranslate(cuisine):
     return {
