@@ -32,9 +32,9 @@
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintBottom_creator="1"
         app:layout_constraintBottom_toBottomOf="@+id/rangeSpinner"
-        android:layout_marginTop="61dp"
+        android:layout_marginTop="64dp"
         tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="62dp"
+        android:layout_marginBottom="64dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/title"
         android:layout_marginLeft="31dp" />
@@ -55,15 +55,15 @@
         android:id="@+id/distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Maximum Range:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:layout_marginLeft="31dp"
         android:layout_marginStart="31dp"
-        tools:layout_constraintTop_creator="1"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="43dp"
+        android:text="Maximum Distance:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/priceRange"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="31dp" />
+        tools:layout_constraintTop_creator="1" />
 
     <Spinner
         android:id="@+id/rangeSpinner"
@@ -72,36 +72,11 @@
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
         app:layout_constraintRight_toRightOf="@+id/priceRangeSpinner"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="38dp"
         app:layout_constraintTop_toBottomOf="@+id/priceRangeSpinner"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/priceRangeSpinner" />
-
-    <TextView
-        android:id="@+id/favoriteMeal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Favorite Meal:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-        android:layout_marginStart="31dp"
-        tools:layout_constraintTop_creator="1"
-        android:layout_marginTop="36dp"
-        app:layout_constraintTop_toBottomOf="@+id/distance"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="31dp" />
-
-    <Spinner
-        android:id="@+id/favoriteMealSpinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="@+id/rangeSpinner"
-        android:layout_marginTop="31dp"
-        app:layout_constraintTop_toBottomOf="@+id/rangeSpinner"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/rangeSpinner" />
+        app:layout_constraintLeft_toLeftOf="@+id/priceRangeSpinner"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <TextView
         android:id="@+id/cuisines"
@@ -111,23 +86,23 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Menu"
         android:layout_marginStart="31dp"
         tools:layout_constraintTop_creator="1"
-        android:layout_marginTop="38dp"
-        app:layout_constraintTop_toBottomOf="@+id/favoriteMeal"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="31dp" />
+        android:layout_marginLeft="31dp"
+        android:layout_marginTop="43dp"
+        app:layout_constraintTop_toBottomOf="@+id/distance" />
 
     <Spinner
         android:id="@+id/spinner6"
-        android:layout_width="0dp"
+        android:layout_width="75dp"
         android:layout_height="wrap_content"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="@+id/favoriteMealSpinner"
-        android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/favoriteMealSpinner"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/favoriteMealSpinner" />
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/rangeSpinner"
+        android:layout_marginTop="41dp"
+        app:layout_constraintTop_toBottomOf="@+id/rangeSpinner"
+        app:layout_constraintLeft_toLeftOf="@+id/rangeSpinner" />
 
     <Button
         android:id="@+id/finishButton"
@@ -139,7 +114,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="63dp"
         app:layout_constraintLeft_toLeftOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

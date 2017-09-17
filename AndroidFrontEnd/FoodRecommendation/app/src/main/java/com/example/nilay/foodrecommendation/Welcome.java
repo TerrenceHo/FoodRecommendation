@@ -32,33 +32,35 @@ public class Welcome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        EditText m_firstName =(EditText)findViewById(R.id.editFirstName);
-        EditText m_lastName =(EditText)findViewById(R.id.editLastName);
-        String firstName = m_firstName.getText().toString();
-        String lastName = m_lastName.getText().toString();
-
-        final JSONObject user_Name = new JSONObject();
-        try {
-            user_Name.put("firstname", firstName);
-            user_Name.put("lastname", lastName);
-            Log.d("Object", "success");
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Log.d("Object", "failure");
-        }
+        final EditText m_firstName =(EditText)findViewById(R.id.editFirstName);
+        final EditText m_lastName =(EditText)findViewById(R.id.editLastName);
 
         // Instantiate the RequestQueue.
         final RequestQueue queue = Volley.newRequestQueue(this);
         final String base_url = "https://food-rec-staging.herokuapp.com";
         final String user_url = base_url + "/api/v1/user";
 
-
         Button btn = (Button)findViewById(R.id.continueButton);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String firstName = m_firstName.getText().toString();
+                String lastName = m_lastName.getText().toString();
+
+                JSONObject user_Name = new JSONObject();
+                try {
+                    user_Name = user_Name.put("firstname", firstName);
+                    user_Name = user_Name.put("lastname", lastName);
+                    Log.i("Object", firstName);
+                    Log.d("Object", lastName);
+                    Log.d("Object", user_Name.toString());
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    Log.d("Object", "failure");
+                }
+
                 JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, user_url, user_Name,
 
                         new Response.Listener<JSONObject>() {
