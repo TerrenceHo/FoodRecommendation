@@ -117,14 +117,14 @@
         android:id="@+id/feels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="I'm feeling..."
+        android:layout_marginLeft="59dp"
         android:layout_marginStart="59dp"
-        tools:layout_constraintTop_creator="1"
         android:layout_marginTop="50dp"
+        android:text="I want..."
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/time"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="59dp" />
+        tools:layout_constraintTop_creator="1" />
 
     <Spinner
         android:id="@+id/feelsSpinner"
