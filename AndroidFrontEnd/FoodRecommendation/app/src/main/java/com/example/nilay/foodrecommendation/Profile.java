@@ -18,7 +18,7 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         // Set options for preferred price range spinner
-        Spinner pRangeSpinner = (Spinner) findViewById(R.id.priceRangeSpinner);
+        final Spinner pRangeSpinner = (Spinner) findViewById(R.id.priceRangeSpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> pRangeAdapter = ArrayAdapter.createFromResource(this,
                 R.array.priceRange_array, android.R.layout.simple_spinner_item);
@@ -50,18 +50,18 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-//        Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parentView) {
-//
-//            }
-//
-//        });
+        pRangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                pRangeSpinner.setSelection(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                pRangeSpinner.setSelection(0);
+            }
+
+        });
     }
 }
 
