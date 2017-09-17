@@ -17,8 +17,9 @@ from pprint import pprint
 #restDicts should be a deep list of dictionaries, with each nested list containing the information of the restaurants retreived for the corresponding queries
 #Each restaurant dictionary inside the deep list will be a dictionary containing the info of a particular restaurant (parsed from JSON returned by Zomato)
 
-
-def trainAndCreateGenericModel(savePath, numEpochs=700, batchSize=400, numSampleQueries=200, learningRate=0.001):
+APIKEY = ["eb3ef3ed91484343e952b92c1a9a626f"]
+validKeys = ["021f7c05ee9f665a3661b8e8b5ade5b4", "66b9ba98643878c90ceca5562236fb86", "1577d3dd8d8b5c7d0b1e5bc5892696c2", "4197a02f11307b726dc4b808a66f316f", "6962b9046e25b8ec8df6c4eaa217b1a6", "4ab5541298fc6740c430e7759bd15d99", "c1d1bc9d4fea4ce5c41482488c0bdc83", "6dbd256a23390a7df501c15bf2a082ad", "aaabf864d2828df6c03f4778ece6a180", "99edda14ed75fda14b5fd5896531fb50", "054510a8e612e6dbcae38272e1d30585", "b2fe2d9f8f52ebe38264dcc56ff8716d", "7d275af62ba3f3ba4b7db34e04cc242d", "a24116cbc0a89daefeb0ba45f7d57249", "8389f312b8c53950fa647c26f3b85bba", "c2110c5b434d840a6481f09a7fab2900", "58174b108c884e285f82ad10c3d876ad", "549d5e031d67e3cc9c635548a9aff9c5", "139eb3f37902443ebf59841aa70caa0d", "57bf0edc2491633a3de14d07d9b75148"]
+def trainAndCreateGenericModel(savePath, numEpochs=100, batchSize=400, numSampleQueries=150, learningRate=0.001, restoreVars=False, restorePath=None):
     #Generate Random queries
     queries = genRandomQueries(numSampleQueries)
     #Generate corresponding retreived restaurants
@@ -26,14 +27,14 @@ def trainAndCreateGenericModel(savePath, numEpochs=700, batchSize=400, numSample
     for query in queries:
         restDicts.append(queryAccept(query))
     print(restDicts)
-    genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learningRate)
+    genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learningRate, restoreVars, restorePath)
     print("Finsihed Training")
     return None
 
 queryCuisineDict = {"American" : 0, "Italian": 1, "Japanese": 2, "Chinese": 3, "Fast Food": 4, "French": 5, "Mediterranean": 6, "Mexican":7, "Thai":8, "Vietnamese":9, "Indian":10, "Other": 12}
 distanceOptions = {"1":0, "5":1, "10":2, "15":3, "20":4, "20+":5}
 
-def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learningRate = 0.001):
+def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learningRate = 0.001, restoreVars=False, restorePath=None):
 
     #Get input tensors from raw data
     numBatches, wideInputFeatures, deepInputFeatures = genInputFeatures(queries, restDicts, batchSize=batchSize)
@@ -66,18 +67,24 @@ def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learning
 
     trainer = tf.train.AdamOptimizer(learningRate).minimize(loss)
     saver = tf.train.Saver()
+    restorer = tf.train.Saver()
 
     print("Started Training")
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
-
+        if (restoreVars):
+            restorer.restore(sess, restorePath)
         for e in range(numEpochs):
             lossForEpoch = 0
             for i in range(numBatches):
                 _, l = sess.run([trainer, loss], feed_dict={deepFeatures : deepInputFeatures[i], wideFeatures: wideInputFeatures[i], y:answers[i]})
                 lossForEpoch += l
+            if e % 5 ==0 and e > 0:
+                APIKEY.append(validKeys[e/5])
             if e % 10 ==0:
                 print("For epoch " + str(e) + ", the cost is " + str(lossForEpoch))
+                saver.save(sess, savePath)
+                print("Saved model at " + savePath)
         saver.save(sess, savePath)
     print("Completed training generic model")
     print("Model stored at: " + savePath)
@@ -115,9 +122,11 @@ def returnTopThree(modelPath, query):
         restorer.restore(sess, modelPath)
         readoutLayer= sess.run([readout], feed_dict={deepFeatures : deepInputFeatures, wideFeatures: wideInputFeatures})
 
-
-    #TODO: After ranking the restaurants, return top 3 (tkae argmax of readout and get coressponding restaurants?)
-    return None
+    bestIndices = readoutLayer.argsort()[-3:][::-1]
+    recommendations = []
+    for index in bestIndices:
+        recommendations.append({"name" :restDicts[i]["restaurant"]["name"], "address" : restDicts[i]["restaurant"]["location"]["address"]})
+    return recommendations
 
 def retrainOnUpdate():
     return None
@@ -314,7 +323,7 @@ def queryAccept(query):
                   #creates query needed for Zomato
             '''
     restQuery = "lat=" + searchLat + ", lon=" + searchLon + ", radius =" + searchDistance + ", cuisines=" + cuisineType
-    restKey = Zomato("309bf0bce94239a8585b1b209da93a3d")
+    restKey = Zomato(APIKEY[-1])
     restJSON = restKey.parse("search", restQuery)
     if not restJSON:
         return None
