@@ -114,8 +114,8 @@ if __name__ == '__main__':
 
     # train base model on startup
 
-    s3 = boto3.resource('s3')
-    s3.Object(os.environ.get('S3_BUCKET'), 'BaseModel/BaseModel.txt').put(Body=open('models/BaseModel.txt', 'rb'))
+    # s3 = boto3.resource('s3')
+    # s3.Object(os.environ.get('S3_BUCKET'), 'BaseModel/BaseModel.txt').put(Body=open('models/BaseModel.txt', 'rb'))
 
     if os.environ.get("PORT") is None:
         app.run(debug=True, port=5000)
