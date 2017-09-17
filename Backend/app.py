@@ -37,7 +37,7 @@ class User(db.Model):
         self.tf_path = ''
 
     def create_path(self, ID):
-        self.tf_path = 'Backend/models/' + self.firstname + self.lastname + str(ID)
+        self.tf_path = 'models/' + self.firstname + self.lastname + str(ID)
 
 
 @app.route('/api/v1/user/<int:user_id>', methods=['GET'])
@@ -105,7 +105,7 @@ def recommend():
         "distance":distance
     }
 
-    topThree = returnTopThree(user.tf_path, queries)
+    topThree = returnTopThree('models/Base/', queries)
     return jsonify({"array":topThree})
 
 
