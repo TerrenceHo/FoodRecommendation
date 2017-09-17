@@ -83,7 +83,7 @@ def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learning
     print("Model stored at: " + savePath)
 
 def returnTopThree(modelPath, query):
-    restDicts = queryAccept(query) #REPLACE WITCH RESULT FROM API CALL
+    restDicts = queryAccept(query) #REPLACE WITH RESULT FROM API CALL
     wideInputFeatures, deepInputFeatures = genInputFeatures([query], restDicts)
 
     #Define tf model:
@@ -105,7 +105,7 @@ def returnTopThree(modelPath, query):
     deepLayer3 = tf.nn.relu(tf.matmul(deepLayer2, deepW3) + deepB3)
     fc_layer = tf.concat([deepLayer3, wideFeatures], 1)
     readout = tf.matmul(fc_layer, fc_W) + fc_B
-    #loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=readout))
+    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=readout))
 
     trainer = tf.train.AdamOptimizer(learningRate).minimize(loss)
     restorer = tf.train.Saver()
@@ -316,6 +316,8 @@ def queryAccept(query):
     restQuery = "lat=" + searchLat + ", lon=" + searchLon + ", radius =" + searchDistance + ", cuisines=" + cuisineType
     restKey = Zomato("309bf0bce94239a8585b1b209da93a3d")
     restJSON = restKey.parse("search", restQuery)
+    if not restJSON:
+        return None
     return restJSON["restaurants"]
 """
 def querySave(query):
