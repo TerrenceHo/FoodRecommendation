@@ -1,8 +1,17 @@
 import os
+import json
+
+import boto3
+from shutil import copyfile
 
 from flask import Flask, jsonify, abort, make_response, request, url_for
 from flask_httpauth import HTTPBasicAuth
 from flask_sqlalchemy import SQLAlchemy
+
+
+
+
+BaseModel = "Backend/models/BaseModel"
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -16,7 +25,6 @@ db = SQLAlchemy(app)
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
-    # email = db.Column(db.String(120), unique=True)
     firstname = db.Column(db.String(120))
     lastname = db.Column(db.String(120))
     tf_path = db.Column(db.String(500))
@@ -27,7 +35,7 @@ class User(db.Model):
         self.tf_path = ''
 
     def create_path(self, ID):
-        self.tf_path = 'models/' + self.firstname + self.lastname + str(ID)
+        self.tf_path = 'Backend/models/' + self.firstname + self.lastname + str(ID)
 
 @app.route('/api/v1/user/<int:user_id>', methods=['GET'])
 def get_user(user_id):
@@ -52,6 +60,8 @@ def create_user():
     db.session.add(user)
     db.session.commit()
 
+    copyfile(BaseModel, user.tf_path)
+
     user_dict = {
         "id":user.id,
         "firstname":user.firstname,
@@ -68,6 +78,7 @@ def update_user():
     user.lastname = request.json["user"]["lastname"]
     user.create_path(user.id)
     db.session.commit()
+
 
     user_dict = {
         "id":user.id,
@@ -94,13 +105,17 @@ def train():
     # and uses it to train using other queries.
     model = learning_models.train(user.tf_path)
 
-
 @app.route('/')
 def home():
     return "App Running"
 
 if __name__ == '__main__':
     db.create_all()
+
+    # train base model on startup
+
+    s3 = boto3.resource('s3')
+    s3.Object(os.environ.get('S3_BUCKET'), 'BaseModel/BaseModel.txt').put(Body=open('models/BaseModel.txt', 'rb'))
 
     if os.environ.get("PORT") is None:
         app.run(debug=True, port=5000)
