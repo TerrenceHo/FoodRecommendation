@@ -23,6 +23,8 @@ def cuisineTranslate(cuisine):
 #pastLocations 
 
 
+distance = {"1":1, "5":5, "10":10, "15":15, "20":20, "20+":24}
+
 searchLat = str(lat)
 searchLon = str(lon)
 cuisineType = cuisineTranslate(cuisine) #check against array and convert to numerical value
