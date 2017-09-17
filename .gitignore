@@ -232,5 +232,4 @@ $RECYCLE.BIN/
 # Any json file
 *.json
 
-Backend/models
 credentials.py
