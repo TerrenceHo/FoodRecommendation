@@ -68,7 +68,7 @@ def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learning
                 _, l = sess.run([trainer, loss], feed_dict={deepFeatures : deepInputFeatures[i], wideFeatures: wideInputFeatures[i], y:answers[i]})
                 lossForEpoch += l
             if e % 10 ==0:
-                print("For epoch " + str(e) + ", the cost is " + str(lossForEpoch))s
+                print("For epoch " + str(e) + ", the cost is " + str(lossForEpoch))
         saver.save(sess, savePath)
     print("Completed training generic model")
     print("Model stored at: " + savePath)
@@ -106,6 +106,7 @@ def returnTopThree(modelPath, query):
         restorer.restore(sess, modelPath)
         readoutLayer= sess.run([readout], feed_dict={deepFeatures : deepInputFeatures, wideFeatures: wideInputFeatures})
 
+
     #TODO: After ranking the restaurants, return top 3 (tkae argmax of readout and get coressponding restaurants?)
     return None
 
@@ -115,6 +116,7 @@ def retrainOnUpdate():
 def genInputFeatures(queries, restDicts, batchSize=None):
     deepFeatures = []
     wideFeatures = []
+    print(type(queries))
     for i in range(len(queries)):
         query = queries[i]
         retreivedRests = restDicts[i]
@@ -176,7 +178,7 @@ def makeBatch(data, batchSize):
     batches = []
     for batchNum in range(float(np.ceil(len(data))/batchSize)):
         batch = []
-        for i in range(batchNum*batchSize, min(len(data), (batchNum+1))*batchSize)
+        for i in range(batchNum*batchSize, min(len(data), (batchNum+1)*batchSize)):
             batch.append(data[i])
         batches.append(batch)
     return batches
@@ -207,7 +209,7 @@ def bias_variable(shape, name=None):
   initial = tf.constant(0.1, shape=shape)
   return tf.Variable(initial, name)
 
- def genRandomQueries(amount):
+def genRandomQueries(amount):
     def strTimeProp(start, end, format, prop):
         """Get a time at a proportion of a range of two formatted times.
 
@@ -234,15 +236,16 @@ def bias_variable(shape, name=None):
     #price
     #time
     #distance
-
+    queries = []
     for x in range(amount):
-      testDict = {}
-      cuisineTable = ['American','Chinese','Fast Food','French','Italian','Japanese','Mediterranean','Mexican','Thai','Vietnamese','Indian']
-      distanceTable  = ['1','5','10','15','20','20+']
-      testDict["lat"] = str(random.uniform(-80.517495,-80.49351))
-      testDict["lon"] = str(random.uniform(43.457147,43.50356))
-      testDict["cuisine"] = cuisineTable[random.randint(0,10)]
-      testDict["price"] = random.randint(1,4)
-      testDict["time"] = randomDate("1/1/2008 12:00 AM", "1/1/2008 11:59 PM", random.random())
-      testDict["distance"] = distanceTable[random.randint(0,5)]
-      return testDict
+        testDict = {}
+        cuisineTable = ['American','Chinese','Fast Food','French','Italian','Japanese','Mediterranean','Mexican','Thai','Vietnamese','Indian']
+        distanceTable  = ['1','5','10','15','20','20+']
+        testDict["lat"] = str(random.uniform(-80.517495,-80.49351))
+        testDict["lon"] = str(random.uniform(43.457147,43.50356))
+        testDict["cuisine"] = cuisineTable[random.randint(0,10)]
+        testDict["price"] = random.randint(1,4)
+        testDict["time"] = randomDate("1/1/2008 12:00 AM", "1/1/2008 11:59 PM", random.random())
+        testDict["distance"] = distanceTable[random.randint(0,5)]
+        queries.append(testDict)
+    return queries
