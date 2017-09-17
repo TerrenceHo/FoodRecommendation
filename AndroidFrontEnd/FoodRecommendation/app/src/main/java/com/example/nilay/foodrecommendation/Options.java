@@ -68,13 +68,20 @@ public class Options extends AppCompatActivity {
                 // int for price
                 Spinner p = (Spinner) findViewById(R.id.priceSpinner);
                 price = p.getSelectedItem().toString().length();
-                Spinner d = (Spinner) findViewById(R.id.distanceSpinner);
                 // int for distance
+                Spinner d = (Spinner) findViewById(R.id.distanceSpinner);
                 String sDistance = d.getSelectedItem().toString();
-                if(sDistance.length() == 3)
+                if(sDistance.length() == 9)
                     distance = 24;
-                else
-                    distance = Integer.parseInt(sDistance);
+                else {
+                    String ssDistance = sDistance.substring(0,2);
+                    if(ssDistance.equals("1 "))
+                        distance = 1;
+                    else if(ssDistance.equals("5 "))
+                        distance = 5;
+                    else
+                        distance = Integer.parseInt(ssDistance);
+                }
                 // int for time
                 Spinner t = (Spinner) findViewById(R.id.timeSpinner);
                 String sTime = t.getSelectedItem().toString();

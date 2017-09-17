@@ -47,22 +47,32 @@ public class Profile extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int price;
+                int distance;
+                String cuisine;
+
+                // int for price
+                Spinner p = (Spinner) findViewById(R.id.priceRangeSpinner);
+                price = p.getSelectedItem().toString().length();
+                // int for distance
+                Spinner d = (Spinner) findViewById(R.id.rangeSpinner);
+                String sDistance = d.getSelectedItem().toString();
+                if(sDistance.length() == 3)
+                    distance = 24;
+                else {
+                    String ssDistance = sDistance.substring(0, 2);
+                    if (ssDistance.equals("1 "))
+                        distance = 1;
+                    else if (ssDistance.equals("5 "))
+                        distance = 5;
+                    else
+                        distance = Integer.parseInt(ssDistance);
+                }
+                // string for cuisine
+                Spinner f = (Spinner) findViewById(R.id.cuisineSpinner);
+                cuisine = f.getSelectedItem().toString();
                 startActivity(new Intent(Profile.this, Dashboard.class));
             }
-        });
-
-        pRangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String item = parentView.getItemAtPosition(position).toString();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                pRangeSpinner.setSelection(0);
-            }
-
         });
     }
 }
