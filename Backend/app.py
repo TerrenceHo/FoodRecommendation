@@ -92,7 +92,7 @@ def recommend():
     longitude = -80.544858
     cuisine = user.fav_cuisine
     num_dollars = user.num_dollars
-    distance = str(user.distance)
+    distance = str(user.max_distance)
     time = datetime.datetime.now()
 
     queries = {
