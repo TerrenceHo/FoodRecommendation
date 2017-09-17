@@ -1,20 +1,20 @@
 import urllib2,json,sys
 
 class Zomato:
-    
+
     def __init__(self,api_key,response_content_type="application/json",base_url="https://developers.zomato.com/api/v2.1/"):
         if api_key:
             self.api_key = api_key
         else:
-            print("NO API KEY GIVEN.")	
+            print("NO API KEY GIVEN.")
             return
-            
+
         self.response_content_type = response_content_type
         self.base_url = base_url
         self.response_content_type = response_content_type
         self.all_endpoints = ["categories","cities","collections","cuisines","establishments","geocode","location_details","locations","dailymenu","restaurant","reviews","search"]
         self.endpoint_param = {"categories":{},"cities":{"q":{'type':'string'},"lat":{'type':'double'},"lon":{'type':'double'},"city_ids":{'type':'string'},"count":{'type':'integer'}},"collections":{"lat":{'type':'double'},"lon":{'type':'double'},"city_id":{'type':'integer'},"count":{'type':'integer'}},"cuisines":{"lat":{'type':'double'},"lon":{'type':'double'},"city_id":{'type':'integer'}},"establishments":{"lat":{'type':'double'},"lon":{'type':'double'},"city_id":{'type':'integer'}},"geocode":{"required":["lat","lon"],"lat":{'type':'double'},"lon":{'type':'double'}},"location_details":{"required":["entity_id","entity_type"],"entity_id":{'type':'integer'},"entity_type":{'type':'string'}},"locations":{"required":["query"],"query":{'type':'string'},"lat":{'type':'double'},"lon":{'type':'double'},"count":{'type':'integer'}},"dailymenu":{"required":["res_id"],"res_id":{'type':'integer'}},"restaurant":{"required":["res_id"],"res_id":{'type':'integer'}},"reviews":{"required":["res_id"],"res_id":{'type':'integer'},"start":{'type':'integer'},"count":{'type':'integer'}},"search":{"entity_id":{'type':'integer'},"entity_type":{'type':'string'},"start":{'type':'integer'},"count":{'type':'integer'},"lat":{'type':'double'},"lon":{'type':'double'},"q":{'type':'string'},"radius":{'type':'double'},"cuisines":{'type':'string'},"establishment_type":{'type':'string'},"collection":{'type':'string'},"order":{'type':'string'},"sort":{'type':'string'}}}
-    
+
     def parse(self,endpoint,parameters=None):
         if endpoint not in self.all_endpoints:
             print("Not a valid endpoint.")
@@ -27,7 +27,7 @@ class Zomato:
         for param in params:
             para_value.extend( param.split("="))
         endpoint_dict = self.endpoint_param[endpoint]
-        
+
         if parameters:
             if "required" in endpoint_dict.keys():
                 required_param_list = endpoint_dict["required"]
@@ -47,24 +47,24 @@ class Zomato:
             if "required" in endpoint_dict.keys():
                 print("Required value missing!!!!")
                 return
-                
+
         if all_parameters:
             all_parameters = all_parameters[:-1]
         a = self._execute(endpoint.lower(),all_parameters)
         if a:
             return a
-        
+
     def _execute(self,endpoint,parameter):
         url = self.base_url + endpoint + "?" + parameter
         req = urllib2.Request(url)
-        if self.response_content_type == "application/json": 
+        if self.response_content_type == "application/json":
             req.add_header('Accept', self.response_content_type)
-            req.add_header("user_key", self.api_key) 
+            req.add_header("user_key", self.api_key)
             try:
                 res = urllib2.urlopen(req)
-                print(res)
+                #print(res)
                 #print(res.getcode())
-                json_data = json.load(res)  
+                json_data = json.load(res)
                 return json_data
                 #return json.dumps(json_data, indent=4, sort_keys=True)
             except urllib2.HTTPError as e:
@@ -72,7 +72,7 @@ class Zomato:
                 return
         elif self.response_content_type == "application/xml":
             req.add_header('Accept', self.response_content_type)
-            req.add_header("user_key", self.api_key) 
+            req.add_header("user_key", self.api_key)
             try:
                 res = urllib2.urlopen(req)
                 print(res.code())
@@ -82,5 +82,3 @@ class Zomato:
         else:
             print("ERROR: Response content type can only be applcation/json or application/xml.")
             return
-    
-            

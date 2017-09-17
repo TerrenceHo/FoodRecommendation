@@ -4,7 +4,12 @@ import geopy.distance
 import math
 import random
 import time
+import datetime
 import pythonAPI as pA
+from zomato import Zomato
+import urllib2
+import json
+from pprint import pprint
 
 #Queries should be a list of dictionaries, with each dictionary containing the parameters of a query
 #Form of each individual query: {"lat": LAT, "lon": LON, "cuisine": CUISINETYPE, "price": PRICENUM, "time": DATETIMEOBJECT, "distance", DISTANCE}
@@ -13,13 +18,14 @@ import pythonAPI as pA
 #Each restaurant dictionary inside the deep list will be a dictionary containing the info of a particular restaurant (parsed from JSON returned by Zomato)
 
 
-def trainAndCreateGenericModel(savePath, numEpochs, batchSize, numSampleQueries=200, learningRate=0.001):
+def trainAndCreateGenericModel(savePath, numEpochs=700, batchSize=400, numSampleQueries=200, learningRate=0.001):
     #Generate Random queries
     queries = genRandomQueries(numSampleQueries)
     #Generate corresponding retreived restaurants
     restDicts = []
     for query in queries:
-        restDicts.append(pA.queryAccept(query))
+        restDicts.append(queryAccept(query))
+    print(restDicts)
     genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learningRate)
     print("Finsihed Training")
     return None
@@ -59,6 +65,7 @@ def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learning
     trainer = tf.train.AdamOptimizer(learningRate).minimize(loss)
     saver = tf.train.Saver()
 
+    print("Started Training")
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
 
@@ -74,7 +81,7 @@ def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learning
     print("Model stored at: " + savePath)
 
 def returnTopThree(modelPath, query):
-    restDicts = pA.queryAccept(query) #REPLACE WITCH RESULT FROM API CALL
+    restDicts = queryAccept(query) #REPLACE WITCH RESULT FROM API CALL
     wideInputFeatures, deepInputFeatures = genInputFeatures([query], restDicts)
 
     #Define tf model:
@@ -116,7 +123,6 @@ def retrainOnUpdate():
 def genInputFeatures(queries, restDicts, batchSize=None):
     deepFeatures = []
     wideFeatures = []
-    print(type(queries))
     for i in range(len(queries)):
         query = queries[i]
         retreivedRests = restDicts[i]
@@ -137,7 +143,8 @@ def genDeepFeatures(query, rest):
     priceRange[query["price"] - 1] = 1
     queryCuisine = [0,0,0,0,0,0,0,0,0,0,0,0]
     queryCuisine[queryCuisineDict[query["cuisine"]]] = 1
-    rating = [(rest["restaurant"]["user_rating"]["aggregate_rating"] -2.5) / 2.5]
+    print((rest))
+    rating = [(float(rest["restaurant"]["user_rating"]["aggregate_rating"]) -2.5) / 2.5]
     distance = [0,0,0,0,0,0]
     distance[distanceOptions[query["distance"]]] = 1
     distBetween = geopy.distance.vincenty((query["lat"], query["lon"]), (rest["restaurant"]["location"]["latitude"], rest["restaurant"]["location"]["longitude"])).miles
@@ -151,7 +158,7 @@ def genDeepFeatures(query, rest):
     return time + priceRange + queryCuisine + rating + distance + distBetweenVector + actualCuisine + actualPrice
 
 def genWideFeatures(query, rest):
-    rating = [(rest["restaurant"]["user_rating"]["aggregate_rating"] -2.5) / 2.5]
+    rating = [(float(rest["restaurant"]["user_rating"]["aggregate_rating"]) -2.5) / 2.5]
     distBetween = geopy.distance.vincenty((query["lat"], query["lon"]), (rest["restaurant"]["location"]["latitude"], rest["restaurant"]["location"]["longitude"])).miles
     inRange = [0]
     if (query["distance"] == "1" and distBetween <= 1):
@@ -188,7 +195,7 @@ def makeAnswers(restDicts, batchSize):
     for retreivedRests in restDicts:
         popularityRatings = []
         for i, rest in enumerate(retreivedRests):
-            rating = [(rest["restaurant"]["user_rating"]["aggregate_rating"] -2.5) / 2.5]
+            rating = [(float(rest["restaurant"]["user_rating"]["aggregate_rating"]) -2.5) / 2.5]
             popularityRatings[i] = rating * int(rest["restaurant"]["user_rating"]["votes"])
         popularityRatings = np.array(popularityRatings)
         bestIndices = popularityRatings.argsort()[-3:][::-1]
@@ -241,11 +248,76 @@ def genRandomQueries(amount):
         testDict = {}
         cuisineTable = ['American','Chinese','Fast Food','French','Italian','Japanese','Mediterranean','Mexican','Thai','Vietnamese','Indian']
         distanceTable  = ['1','5','10','15','20','20+']
-        testDict["lat"] = str(random.uniform(-80.517495,-80.49351))
-        testDict["lon"] = str(random.uniform(43.457147,43.50356))
+        testDict["lat"] = str(random.uniform(43.457147,43.50356))
+        testDict["lon"] = str(random.uniform(-80.517495,-80.49351))
         testDict["cuisine"] = cuisineTable[random.randint(0,10)]
         testDict["price"] = random.randint(1,4)
-        testDict["time"] = randomDate("1/1/2008 12:00 AM", "1/1/2008 11:59 PM", random.random())
+        testDict["time"] = datetime.time(random.randint(0,23), random.randint(0,59), random.randint(0,59))
         testDict["distance"] = distanceTable[random.randint(0,5)]
         queries.append(testDict)
     return queries
+
+from zomato import Zomato
+import urllib2
+import json
+from pprint import pprint
+
+def cuisineTranslate(cuisine):
+    return {
+            'American': '1',
+            'Chinese': '25',
+            'Fast Food': '40',
+            'French': '45',
+            'Italian': '55',
+            'Japanese': '60',
+            'Mediterranean': '70',
+            'Mexican': '73',
+            'Thai': '95',
+            'Vietnamese': '99',
+            'Indian': '148',
+            }.get(cuisine, '')
+
+#Within ~100ft or .004 of a degree
+#Pass lat long every 30 seconds to array, remove oldest if does average not fufill deviation of .004 degree
+#pastLocations
+
+
+def queryAccept(query):
+
+    #Variable Declaration
+    searchLat = ""
+    searchLon = ""
+    cuisineType = ""
+    priceLevel = ""
+    searchDistance = "1"
+
+    for key in query:
+        if key == "lat":
+            searchLat = str(query["lat"])
+        elif key == "lon":
+            searchLon = str(query["lon"])
+        elif key == "cuisine":
+            cuisineType = cuisineTranslate(query["cuisine"])
+        elif key == "price":
+            priceLevel = str(query["price"])
+        elif key == "distance":
+            if query["distance"] == "20+":
+                searchDistance = str(24 * 1609)
+            else:
+                searchDistance = str(int(query["distance"]) * 1609)
+        elif key == "time":
+            '''
+                  distanceRef = {"1":1, "5":5, "10":10, "15":15, "20":20, "20+":24}
+                  searchLat = str(lat)
+                  searchLon = str(lon)
+                  cuisineType = cuisineTranslate(cuisine) #check against array and convert to numerical value
+                  searchdistance = str(distance * 1609) #distance will be in km, Zomato api needs in meters
+                  #creates query needed for Zomato
+            '''
+    restQuery = "lat=" + searchLat + ", lon=" + searchLon + ", radius =" + searchDistance + ", cuisines=" + cuisineType
+    restKey = Zomato("309bf0bce94239a8585b1b209da93a3d")
+    restJSON = restKey.parse("search", restQuery)
+    return restJSON
+
+
+#distance = {"1":1, "5":5, "10":10, "15":15, "20":20, "20+":24}
