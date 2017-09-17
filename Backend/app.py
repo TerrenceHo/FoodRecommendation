@@ -64,7 +64,7 @@ def create_user():
 
 @app.route('/api/v1/user', methods=['PUT'])
 def update_user():
-    ID = request.json["user"]["id"]
+    ID = request.json["user_id"]
     user = User.query.filter_by(id=ID).first()
     user.firstname = request.json["user"]["firstname"]
     user.lastname = request.json["user"]["lastname"]
@@ -88,14 +88,29 @@ def delete_user():
     db.session.commit()
     return "", 200
 
-# @app.route('/api/v1/train', methods=['POST'])
-# def train():
-#     ID = request.json["id"]
-#     user = User.query.filter_by(id=ID).first()
+@app.route('/api/v1/recommend', methods=['POST'])
+def recommend():
+    id = request.json["user_id"]
 
-#     # function that takes in the path to model trained for that user,
-#     # and uses it to train using other queries.
-#     model = learning_models.train(user.tf_path)
+    latitude = request.json["latitude"]
+    longitude = request.json["longitude"]
+    cuisine = request.json["cuisine"]
+    num_dollars = request.json["price"]
+    distance = request.json["distance"]
+    time = datetime.datetime.now()
+    time += datetime.timedelta(hours=3)
+
+    queries = {
+        "lat":latitude,
+        "lon":longitude,
+        "cuisine":cuisine,
+        "price":num_dollars,
+        "time":time,
+        "distance":distance
+    }
+
+    returnTopThree("models/" + 
+
 
 @app.route('/')
 def home():
