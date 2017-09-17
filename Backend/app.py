@@ -105,7 +105,7 @@ def recommend():
         "distance":distance
     }
 
-    topThree = returnTopThree('models/Base/', queries)
+    topThree = returnTopThree('Backend/models/Base/', queries)
     return jsonify({"array":topThree})
 
 
