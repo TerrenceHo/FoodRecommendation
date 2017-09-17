@@ -5,6 +5,7 @@ import math
 import random
 import time
 import datetime
+from datetime import datetime
 import pythonAPI as pA
 from zomato import Zomato
 import urllib2
@@ -82,8 +83,6 @@ def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learning
                 #print(answers[i])
                 _,r, l = sess.run([trainer,readout, loss], feed_dict={deepFeatures : deepInputFeatures[i], wideFeatures: wideInputFeatures[i], y:answers[i]})
                 lossForEpoch += l
-                print(r)
-                print(answers[i])
             if e % 5 ==0 and e > 0:
                 APIKEY.append(validKeys[e/5])
             if e % 10 ==0:
@@ -96,7 +95,7 @@ def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learning
 
 def returnTopThree(modelPath, query):
     restDicts = queryAccept(query) #REPLACE WITH RESULT FROM API CALL
-    wideInputFeatures, deepInputFeatures = genInputFeatures([query], restDicts)
+    wideInputFeatures, deepInputFeatures = genInputFeatures([query], [restDicts])
 
     #Define tf model:
     wideFeatures = tf.placeholder(tf.float32, shape=[None, 3])
@@ -118,8 +117,8 @@ def returnTopThree(modelPath, query):
     fc_layer = tf.concat([deepLayer3, wideFeatures], 1)
     readout = tf.matmul(fc_layer, fc_W) + fc_B
     #loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=readout))
-    loss = tf.reduce_mean(tf.squared_difference(readout, y))
-    trainer = tf.train.AdamOptimizer(learningRate).minimize(loss)
+    #loss = tf.reduce_mean(tf.squared_difference(readout, y))
+    #trainer = tf.train.AdamOptimizer(learningRate).minimize(loss)
     restorer = tf.train.Saver()
 
     with tf.Session() as sess:
@@ -127,10 +126,11 @@ def returnTopThree(modelPath, query):
         restorer.restore(sess, modelPath)
         readoutLayer= sess.run([readout], feed_dict={deepFeatures : deepInputFeatures, wideFeatures: wideInputFeatures})
 
-    bestIndices = readoutLayer.argsort()[-3:][::-1]
+    readoutLayer = np.reshape(np.array(readoutLayer), (len(restDicts)))
+    bestIndices = np.array(readoutLayer).argsort()[-3:][::-1]
     recommendations = []
     for index in bestIndices:
-        recommendations.append({"name" :restDicts[i]["restaurant"]["name"], "address" : restDicts[i]["restaurant"]["location"]["address"]})
+        recommendations.append({"name" :restDicts[index]["restaurant"]["name"], "address" : restDicts[index]["restaurant"]["location"]["address"]})
     return recommendations
 
 def retrainOnUpdate():
