@@ -60,13 +60,7 @@ def create_user():
     db.session.add(user)
     db.session.commit()
 
-    user_dict = {
-        "id":user.id,
-        "firstname":user.firstname,
-        "lastname":user.lastname,
-        "tf_path":user.tf_path
-    }
-    return jsonify({"user":user_dict})
+    return jsonify({"user_id":user.id})
 
 @app.route('/api/v1/user', methods=['PUT'])
 def update_user():
