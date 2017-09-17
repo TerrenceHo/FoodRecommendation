@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class Profile extends AppCompatActivity {
 
@@ -34,13 +35,6 @@ public class Profile extends AppCompatActivity {
         maxRangeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         maxRangeSpinner.setAdapter(maxRangeAdapter);
 
-        // Set options for favorite meal spinner
-        Spinner favMealSpinner = (Spinner) findViewById(R.id.favoriteMealSpinner);
-        ArrayAdapter<CharSequence> favMealAdapter = ArrayAdapter.createFromResource(this, R.array.mealType_array,
-                android.R.layout.simple_spinner_item);
-        favMealAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        favMealSpinner.setAdapter(favMealAdapter);
-
         Button btn = (Button)findViewById(R.id.finishButton);
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +47,8 @@ public class Profile extends AppCompatActivity {
         pRangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                pRangeSpinner.setSelection(position);
+                String item = parentView.getItemAtPosition(position).toString();
+
             }
 
             @Override
