@@ -39,14 +39,16 @@ def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learning
     numBatches, wideInputFeatures, deepInputFeatures = genInputFeatures(queries, restDicts, batchSize=batchSize)
     #TODO: Figure out format of answers
     answers = makeAnswers(restDicts, batchSize)
+    answers = np.array(answers)
+    print(answers.shape)
 
     #Define tf model:
     wideFeatures = tf.placeholder(tf.float32, shape=[None, 3])
-    deepFeatures = tf.placeholder(tf.float32, shape=[None, 39])
+    deepFeatures = tf.placeholder(tf.float32, shape=[None, 40])
     y = tf.placeholder(tf.float32, shape=[None, 1])
 
 
-    deepW1 = weight_variable([39, 30], name="deepW1")
+    deepW1 = weight_variable([40, 30], name="deepW1")
     deepB1 = bias_variable([30], name="deepB1")
     deepW2 = weight_variable([30, 20], name="deepW2")
     deepB2 = bias_variable([20], name="deepB2")
@@ -86,10 +88,10 @@ def returnTopThree(modelPath, query):
 
     #Define tf model:
     wideFeatures = tf.placeholder(tf.float32, shape=[None, 3])
-    deepFeatures = tf.placeholder(tf.float32, shape=[None, 39])
+    deepFeatures = tf.placeholder(tf.float32, shape=[None, 40])
 
 
-    deepW1 = weight_variable([39, 30], name="deepW1")
+    deepW1 = weight_variable([40, 30], name="deepW1")
     deepB1 = bias_variable([30], name="deepB1")
     deepW2 = weight_variable([30, 20], name="deepW2")
     deepB2 = bias_variable([20], name="deepB2")
@@ -151,7 +153,7 @@ def genDeepFeatures(query, rest):
     distBetweenVector = [max(-1, min(1, (distBetween - 15)/14))]
     actualCuisine = [0,0,0,0,0,0,0,0,0,0,0]
     for option in queryCuisineDict.keys():
-        if option in rest["restaurant"]["cuisine"]:
+        if option in rest["restaurant"]["cuisines"]:
             actualCuisine[queryCuisineDict[option]] = 1
     actualPrice = [0,0,0,0]
     actualPrice[rest["restaurant"]["price_range"] - 1] = 1
@@ -173,39 +175,36 @@ def genWideFeatures(query, rest):
         inRange[0] = 1
     elif (query["distance"] == "20+"):
         inRange[0] = 1
-    else:
-        raise ValueError
     cuisineMatch = [0]
-    if (query["cuisine"] in rest["restaurant"]["cuisine"]):
-        cuisineMatch = 1
+    if (query["cuisine"] in rest["restaurant"]["cuisines"]):
+        cuisineMatch[0] = 1
     return inRange + cuisineMatch + rating
 
 def makeBatch(data, batchSize):
     #TAKE A 2-D List shape = (numData, x) and reshape to (numBatches, batchSize, x)
     batches = []
-    for batchNum in range(float(np.ceil(len(data))/batchSize)):
+    for batchNum in range(int(float(np.ceil(len(data))/batchSize))):
         batch = []
         for i in range(batchNum*batchSize, min(len(data), (batchNum+1)*batchSize)):
             batch.append(data[i])
         batches.append(batch)
-    return batches
+    return len(batches), batches
 
 def makeAnswers(restDicts, batchSize):
     answers = []
     for retreivedRests in restDicts:
         popularityRatings = []
-        for i, rest in enumerate(retreivedRests):
+        for rest in retreivedRests:
             rating = [(float(rest["restaurant"]["user_rating"]["aggregate_rating"]) -2.5) / 2.5]
-            popularityRatings[i] = rating * int(rest["restaurant"]["user_rating"]["votes"])
+            popularityRatings.append(rating * int(rest["restaurant"]["user_rating"]["votes"]))
         popularityRatings = np.array(popularityRatings)
         bestIndices = popularityRatings.argsort()[-3:][::-1]
         answer = [[0] for i in range(len(retreivedRests))]
         for index in bestIndices:
-            anwer[index][0] = 1
+            answer[index][0] = 1
         answers.extend(answer)
-    return answers
     if (batchSize):
-        numBatches, anwers = makeBatch(answers, batchSize)
+        numBatches, answers = makeBatch(answers, batchSize)
     return answers
 
 def weight_variable(shape, name=None):
@@ -247,7 +246,7 @@ def genRandomQueries(amount):
     for x in range(amount):
         testDict = {}
         cuisineTable = ['American','Chinese','Fast Food','French','Italian','Japanese','Mediterranean','Mexican','Thai','Vietnamese','Indian']
-        distanceTable  = ['1','5','10','15','20','20+']
+        distanceTable  = ["1","5","10","15","20","20+"]
         testDict["lat"] = str(random.uniform(43.457147,43.50356))
         testDict["lon"] = str(random.uniform(-80.517495,-80.49351))
         testDict["cuisine"] = cuisineTable[random.randint(0,10)]
@@ -317,7 +316,49 @@ def queryAccept(query):
     restQuery = "lat=" + searchLat + ", lon=" + searchLon + ", radius =" + searchDistance + ", cuisines=" + cuisineType
     restKey = Zomato("309bf0bce94239a8585b1b209da93a3d")
     restJSON = restKey.parse("search", restQuery)
-    return restJSON
+    return restJSON["restaurants"]
+"""
+def querySave(query):
+    #Variable Declaration
+	currLat = ""
+	currLon = ""
+	searchLon = ""
+	cuisineType = ""
+	priceLevel = ""
+	searchDistance = "24"
+	restaurantName = ""
+
+	for key in query:
+        if key == "lat":
+            currLat = str(query["lat"]) + ""
+        elif key == "lon":
+            currLon = str(query["lon"])
+        elif key == "cuisine":
+            cuisineType = cuisineTranslate(query["cuisine"])
+        elif key == "q":
+            restaurantName = query["q"]
+        elif key == "distance":
+            searchDistance = str(24*1609)
+    restQuery = "lat=" + searchLat + ", lon=" + searchLon + ", q=" + restaurantName + ", radius=" + searchDistance + ", cuisines=" + cuisineType
+    restKey = Zomato("309bf0bce94239a8585b1b209da93a3d")
+    restJSON = restKey.parse("search", restQuery)
+    return restJSON[0]
+
+def queryRandom(query):
+    currLat = ""
+ 	currLon = ""
+
+ 	for key in query:
+ 		if key == "lat":
+ 			currLat = str(query["lat"])
+ 		elif key == "lon":
+ 			currLon = str(query["lon"])
+ 	restQuery = "lat=" + searchLat + ", lon=" + searchLon + ", radius=38616, order=asc, sort=real_distance"
+ 	restKey = Zomato("309bf0bce94239a8585b1b209da93a3d")
+ 	restJSON = restKey.parse("search", restQuery)
+ 	randRest = restJSON[random.randint(0, len(restJSON) - 1)]
+ 	return randRest
 
 
 #distance = {"1":1, "5":5, "10":10, "15":15, "20":20, "20+":24}
+"""
