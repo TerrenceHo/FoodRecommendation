@@ -108,44 +108,6 @@ def recommend():
     return jsonify({"array":topThree})
 
 
-class Experience(db.Model):
-    __tablename__ = "experiences"
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    latitude = db.Column(db.Float)
-    logitude = db.Column(db.Float)
-    restaurant = db.Column(db.String(200))
-    num_dollars = db.Column(db.Integer)
-    time_visited = db.Column(db.DateTime)
-    rating = db.Column(db.Float)
-
-    def __init__(self, user_id, latitude, logitude, restaurant, 
-            num_dollars, time_visited, rating):
-        self.user_id = user_id
-        self.latitude = latitude
-        self.longitude = longitude
-        self.restaurant = restaurant
-        self.num_dollars = num_dollars
-        self.time_visited = datetime.datetime.now() # DATE FORMAT???
-        self.rating = rating
-
-@app.route('/api/v1/experience', methods=['POST'])
-def add_experience():
-    user_id = request.json["user_id"]
-    latitude = request.json["latitude"]
-    longitude = request.json["longitude"]
-    restaurant = request.json["restaurant"]
-    num_dollars = request.json["num_dollars"]
-    time_visited = request.json["time_visited"]
-    distance = request.json["distance"]
-
-    # experience = Experience(user_id, latitude, longitude, restaurant,
-    #         num_dollars, time_visited)
-    # db.session.add(experience)
-    # db.session.commit()
-
-    # Pass data to zamato
-    # Generate shifts of this data to train
 
 @app.route('/')
 def home():
