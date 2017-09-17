@@ -23,6 +23,47 @@ def cuisineTranslate(cuisine):
 #pastLocations 
 
 
+def queryAccept(query):
+
+      #Variable Declaration
+      searchLat = ""
+      searchLon = ""
+      cuisineType = ""
+      priceLevel = ""
+      searchDistance = "1"
+
+      for key in query:
+            if key == "lat":
+                  searchLat = str(query["lat"])
+            elif key == "lon":
+                  searchLon = str(query["lon"])
+            elif key == "cuisine":
+                  cuisineType = cuisineTranslate(query["cuisine"])
+            elif key == "price":
+                  priceLevel = str(query["price"])
+            elif key == "distance":
+                  if query["distance"] == "20+":
+                        searchDistance = str(24 * 1609)
+                  else:
+                  searchDistance = str(int(query["distance"]) * 1609)
+            elif key == "time":
+
+      '''      
+      distanceRef = {"1":1, "5":5, "10":10, "15":15, "20":20, "20+":24}
+      searchLat = str(lat)
+      searchLon = str(lon)
+      cuisineType = cuisineTranslate(cuisine) #check against array and convert to numerical value
+      searchdistance = str(distance * 1609) #distance will be in km, Zomato api needs in meters
+      #creates query needed for Zomato 
+      '''
+      restQuery = "lat=" + searchLat + ", lon=" + searchLon + ", radius =" + searchDistance + ", cuisines=" + cuisineType
+      restKey = Zomato("309bf0bce94239a8585b1b209da93a3d")
+      restJSON = restKey.parse("search", restQuery)
+      return restJSON
+
+
+distance = {"1":1, "5":5, "10":10, "15":15, "20":20, "20+":24}
+
 searchLat = str(lat)
 searchLon = str(lon)
 cuisineType = cuisineTranslate(cuisine) #check against array and convert to numerical value
