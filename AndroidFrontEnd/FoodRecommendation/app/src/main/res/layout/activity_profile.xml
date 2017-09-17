@@ -28,55 +28,58 @@
         android:layout_height="wrap_content"
         android:text="Preferred Price Range: "
         android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-        android:layout_marginStart="31dp"
         tools:layout_constraintTop_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="@+id/rangeSpinner"
-        android:layout_marginTop="64dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="64dp"
+        tools:layout_constraintRight_creator="1"
+        android:layout_marginEnd="14dp"
+        app:layout_constraintTop_toTopOf="@+id/priceRangeSpinner"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="31dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/title"
-        android:layout_marginLeft="31dp" />
+        app:layout_constraintRight_toLeftOf="@+id/priceRangeSpinner"
+        android:layout_marginRight="8dp" />
 
     <Spinner
         android:id="@+id/priceRangeSpinner"
-        android:layout_width="75dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:prompt="Select"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
-        android:layout_marginEnd="67dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="87dp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginRight="67dp" />
+        app:layout_constraintRight_toRightOf="@+id/rangeSpinner"
+        android:layout_marginTop="97dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/rangeSpinner"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="31dp"
         android:layout_marginStart="31dp"
-        android:layout_marginTop="54dp"
         android:text="Maximum Distance:"
         android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/priceRange"
+        tools:layout_constraintTop_creator="1"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1" />
+        app:layout_constraintTop_toTopOf="@+id/rangeSpinner"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Spinner
         android:id="@+id/rangeSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:prompt="Select"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="@+id/priceRangeSpinner"
-        android:layout_marginTop="52dp"
-        app:layout_constraintTop_toBottomOf="@+id/priceRangeSpinner"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="@+id/cuisineSpinner"
+        app:layout_constraintRight_toRightOf="@+id/cuisineSpinner"
+        android:layout_marginTop="73dp"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/priceRangeSpinner"
-        app:layout_constraintHorizontal_bias="0.0" />
+        android:layout_marginBottom="73dp"
+        app:layout_constraintLeft_toLeftOf="@+id/cuisineSpinner"
+        app:layout_constraintTop_toTopOf="@+id/priceRangeSpinner" />
 
     <TextView
         android:id="@+id/cuisines"
@@ -87,23 +90,24 @@
         android:layout_marginStart="31dp"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="31dp"
-        android:layout_marginTop="54dp"
-        app:layout_constraintTop_toBottomOf="@+id/distance" />
+        app:layout_constraintTop_toTopOf="@+id/cuisineSpinner"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Spinner
         android:id="@+id/cuisineSpinner"
-        android:layout_width="75dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        app:layout_constraintLeft_toLeftOf="@+id/rangeSpinner"
-        app:layout_constraintRight_toRightOf="@+id/rangeSpinner"
-        app:layout_constraintTop_toBottomOf="@+id/rangeSpinner"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"
+        android:prompt="Select"
         tools:layout_constraintTop_creator="1"
-        app:layout_constraintHorizontal_bias="0.0" />
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="29dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="29dp" />
 
     <Button
         android:id="@+id/finishButton"
