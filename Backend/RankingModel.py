@@ -13,14 +13,16 @@ import pythonAPI as pA
 #Each restaurant dictionary inside the deep list will be a dictionary containing the info of a particular restaurant (parsed from JSON returned by Zomato)
 
 
-def trainAndCreateGenericModel(savePath, numEpochs, BatchSize, numSampleQueries=200, learningRate=0.001):
+def trainAndCreateGenericModel(savePath, numEpochs, batchSize, numSampleQueries=200, learningRate=0.001):
     #Generate Random queries
-    queries = None
+    queries = genRandomQueries(numSampleQueries)
     #Generate corresponding retreived restaurants
-    restDicts = None
+    restDicts = []
+    for query in queries:
+        restDicts.append(pA.queryAccept(query))
     genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learningRate)
+    print("Finsihed Training")
     return None
-
 
 queryCuisineDict = {"American" : 0, "Italian": 1, "Japanese": 2, "Chinese": 3, "Fast Food": 4, "French": 5, "Mediterranean": 6, "Mexican":7, "Thai":8, "Vietnamese":9, "Indian":10, "Other": 12}
 distanceOptions = {"1":0, "5":1, "10":2, "15":3, "20":4, "20+":5}
@@ -66,14 +68,13 @@ def genGenericModel(savePath, queries, restDicts, numEpochs, batchSize, learning
                 _, l = sess.run([trainer, loss], feed_dict={deepFeatures : deepInputFeatures[i], wideFeatures: wideInputFeatures[i], y:answers[i]})
                 lossForEpoch += l
             if e % 10 ==0:
-                print("For epoch " + str(e) + ", the cost is " + str(lossForEpoch))
-
+                print("For epoch " + str(e) + ", the cost is " + str(lossForEpoch))s
         saver.save(sess, savePath)
     print("Completed training generic model")
     print("Model stored at: " + savePath)
 
 def returnTopThree(modelPath, query):
-    restDicts = None #REPLACE WITCH RESULT FROM API CALL
+    restDicts = pA.queryAccept(query) #REPLACE WITCH RESULT FROM API CALL
     wideInputFeatures, deepInputFeatures = genInputFeatures([query], restDicts)
 
     #Define tf model:
@@ -197,10 +198,6 @@ def makeAnswers(restDicts, batchSize):
     if (batchSize):
         numBatches, anwers = makeBatch(answers, batchSize)
     return answers
-
-def retreivePossibleRests(query):
-    #CALL ALEXS SHIT HERE
-    return None
 
 def weight_variable(shape, name=None):
   initial = tf.truncated_normal(shape, stddev=0.1)
