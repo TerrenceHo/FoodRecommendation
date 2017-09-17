@@ -1,9 +1,15 @@
 import os
+import json
+
+import boto3
 from shutil import copyfile
 
 from flask import Flask, jsonify, abort, make_response, request, url_for
 from flask_httpauth import HTTPBasicAuth
 from flask_sqlalchemy import SQLAlchemy
+
+
+
 
 BaseModel = "Backend/models/BaseModel"
 
@@ -106,6 +112,11 @@ def home():
 
 if __name__ == '__main__':
     db.create_all()
+
+    # train base model on startup
+
+    s3 = boto3.resource('s3')
+    s3.Object(os.environ.get('S3_BUCKET'), 'BaseModel/BaseModel.txt').put(Body=open('models/BaseModel.txt', 'rb'))
 
     if os.environ.get("PORT") is None:
         app.run(debug=True, port=5000)
