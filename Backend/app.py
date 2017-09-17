@@ -60,8 +60,6 @@ def create_user():
     db.session.add(user)
     db.session.commit()
 
-    copyfile(BaseModel, user.tf_path)
-
     user_dict = {
         "id":user.id,
         "firstname":user.firstname,
