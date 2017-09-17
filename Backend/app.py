@@ -105,7 +105,7 @@ def recommend():
     }
 
     topThree = returnTopThree(user.tf_path, queries)
-    return jsonify("array":topThree)
+    return jsonify({"array":topThree})
 
 
 class Experience(db.Model):
