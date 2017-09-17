@@ -1,6 +1,6 @@
 import os
 import json
-import datetime
+from datetime import datetime
 
 import boto3
 from shutil import copyfile
@@ -93,7 +93,8 @@ def recommend():
     cuisine = user.fav_cuisine
     num_dollars = user.num_dollars
     distance = str(user.max_distance)
-    time = datetime.datetime.now()
+    time = datetime.now()
+    
 
     queries = {
         "lat":latitude,
