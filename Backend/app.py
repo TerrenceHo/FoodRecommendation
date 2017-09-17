@@ -88,14 +88,14 @@ def delete_user():
     db.session.commit()
     return "", 200
 
-@app.route('/api/v1/train', methods=['POST'])
-def train():
-    ID = request.json["id"]
-    user = User.query.filter_by(id=ID).first()
+# @app.route('/api/v1/train', methods=['POST'])
+# def train():
+#     ID = request.json["id"]
+#     user = User.query.filter_by(id=ID).first()
 
-    # function that takes in the path to model trained for that user,
-    # and uses it to train using other queries.
-    model = learning_models.train(user.tf_path)
+#     # function that takes in the path to model trained for that user,
+#     # and uses it to train using other queries.
+#     model = learning_models.train(user.tf_path)
 
 @app.route('/')
 def home():

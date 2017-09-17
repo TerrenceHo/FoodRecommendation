@@ -1,6 +1,7 @@
 package com.example.nilay.foodrecommendation;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,6 +68,21 @@ public class Welcome extends AppCompatActivity {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Log.d("Activity", response.toString());
+
+                                // We need an Editor object to make preference changes.
+                                // All objects are from android.context.Context
+                                SharedPreferences userID = getPreferences(0);
+                                SharedPreferences.Editor editor = userID.edit();
+                                int i;
+                                try {
+                                    i = response.getInt("user_id");
+                                } catch (JSONException e){
+                                    i = -1;
+                                }
+                                editor.putInt("userID", i);
+
+                                // Commit the edits!
+                                editor.commit();
                             }
                         }, new Response.ErrorListener() {
                     @Override
