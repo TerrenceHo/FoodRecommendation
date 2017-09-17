@@ -41,9 +41,11 @@ public class Welcome extends AppCompatActivity {
         try {
             user_Name.put("firstname", firstName);
             user_Name.put("lastname", lastName);
+            Log.d("Object", "success");
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            Log.d("Object", "failure");
         }
 
         // Instantiate the RequestQueue.
