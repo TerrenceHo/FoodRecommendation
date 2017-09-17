@@ -88,13 +88,12 @@ def recommend():
     user_id = request.json["user_id"]
     user = User.query.get(user_id)
 
-    latitude = request.json["latitude"]
-    longitude = request.json["longitude"]
-    cuisine = request.json["cuisine"]
-    num_dollars = request.json["price"]
-    distance = request.json["distance"]
+    latitude = 43.47.2285
+    longitude = -80.544858
+    cuisine = user.fav_cuisine
+    num_dollars = user.num_dollars
+    distance = str(user.distance)
     time = datetime.datetime.now()
-    time += datetime.timedelta(hours=3)
 
     queries = {
         "lat":latitude,
@@ -105,7 +104,8 @@ def recommend():
         "distance":distance
     }
 
-    returnTopThree(user.tf_path)
+    topThree = returnTopThree(user.tf_path, queries)
+    return jsonify("array":topThree)
 
 
 class Experience(db.Model):
@@ -139,10 +139,10 @@ def add_experience():
     time_visited = request.json["time_visited"]
     distance = request.json["distance"]
 
-    experience = Experience(user_id, latitude, longitude, restaurant,
-            num_dollars, time_visited)
-    db.session.add(experience)
-    db.session.commit()
+    # experience = Experience(user_id, latitude, longitude, restaurant,
+    #         num_dollars, time_visited)
+    # db.session.add(experience)
+    # db.session.commit()
 
     # Pass data to zamato
     # Generate shifts of this data to train
