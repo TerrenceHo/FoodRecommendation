@@ -8,12 +8,12 @@
     </string-array>
 
     <string-array name="distance_array">
-        <item>2 miles</item>
+        <item>1 miles</item>
         <item>5 miles</item>
         <item>10 miles</item>
         <item>15 miles</item>
-        <item>25 miles</item>
-        <item>25+ miles</item>
+        <item>20 miles</item>
+        <item>20+ miles</item>
     </string-array>
 
     <string-array name="time_array">

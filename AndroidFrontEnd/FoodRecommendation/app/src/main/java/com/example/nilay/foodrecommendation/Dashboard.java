@@ -13,7 +13,7 @@ public class Dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        Button btn = (Button)findViewById(R.id.continueButton);
+        Button btn = (Button)findViewById(R.id.optionsButton);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

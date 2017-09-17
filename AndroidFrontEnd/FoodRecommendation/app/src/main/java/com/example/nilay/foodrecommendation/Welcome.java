@@ -13,6 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.nilay.foodrecommendation.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,33 +30,33 @@ public class Welcome extends AppCompatActivity {
         String firstName = m_firstName.getText().toString();
         String lastName = m_lastName.getText().toString();
 
-        JSONObject user_Name = new JSONObject();
+       /* JSONObject user_Name = new JSONObject();
         try {
             user_Name.put("firstname", firstName);
             user_Name.put("lastname", lastName);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
+        }*/
 
         // Generate unique UserID
 
 
         // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String base_url ="https://food-rec-staging.herokuapp.com";
-        String user_url = base_url + "/api/v1/user";
+     //   RequestQueue queue = Volley.newRequestQueue(this);
+     //   String base_url ="https://food-rec-staging.herokuapp.com";
+     //   String user_url = base_url + "/api/v1/user";
 
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, user_url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+    //    StringRequest stringRequest = new StringRequest(Request.Method.POST, user_url,
+    //            new Response.Listener<String>() {
+     //               @Override
+    //                public void onResponse(String response) {
 
-                    }
-                });
+    //                }
+    //            });
         // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+   //     queue.add(stringRequest);
 
         Button btn = (Button)findViewById(R.id.continueButton);
 

@@ -46,7 +46,7 @@ public class Options extends AppCompatActivity {
         tSpinner.setAdapter(tAdapter);
 
         // Set options for feels spinner
-        Spinner fSpinner = (Spinner) findViewById(R.id.priceRangeSpinner);
+        Spinner fSpinner = (Spinner) findViewById(R.id.feelsSpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> fAdapter = ArrayAdapter.createFromResource(this,
                 R.array.feels_array, android.R.layout.simple_spinner_item);
@@ -55,7 +55,7 @@ public class Options extends AppCompatActivity {
         // Apply the adapter to the spinner
         fSpinner.setAdapter(fAdapter);
 
-        Button btn = (Button)findViewById(R.id.continueButton);
+        Button btn = (Button)findViewById(R.id.findButton);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

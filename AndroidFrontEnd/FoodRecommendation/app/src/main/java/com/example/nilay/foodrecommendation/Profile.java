@@ -39,7 +39,7 @@ public class Profile extends AppCompatActivity {
         favMealAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         favMealSpinner.setAdapter(favMealAdapter);
 
-        Button btn = (Button)findViewById(R.id.continueButton);
+        Button btn = (Button)findViewById(R.id.finishButton);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
