@@ -16,13 +16,6 @@
         <item>20+ miles</item>
     </string-array>
 
-    <string-array name="mealType_array">
-        <item>Breakfast</item>
-        <item>Lunch</item>
-        <item>Dinner</item>
-        <item>Dessert</item>
-    </string-array>
-
     <string-array name="cuisine_array">
         <item>American</item>
         <item>Chinese</item>

@@ -28,12 +28,19 @@ public class Profile extends AppCompatActivity {
         // Apply the adapter to the spinner
         pRangeSpinner.setAdapter(pRangeAdapter);
 
-        // Set options for maximum range spinner
-        Spinner maxRangeSpinner = (Spinner) findViewById(R.id.rangeSpinner);
-        ArrayAdapter<CharSequence> maxRangeAdapter = ArrayAdapter.createFromResource(this, R.array.range_array,
+        // Set options for maximum distance spinner
+        Spinner maxDistanceSpinner = (Spinner) findViewById(R.id.rangeSpinner);
+        ArrayAdapter<CharSequence> maxDistanceAdapter = ArrayAdapter.createFromResource(this, R.array.range_array,
                 android.R.layout.simple_spinner_item);
-        maxRangeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        maxRangeSpinner.setAdapter(maxRangeAdapter);
+        maxDistanceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        maxDistanceSpinner.setAdapter(maxDistanceAdapter);
+
+        // Set options for cuisine spinner
+        Spinner cuisineSpinner = (Spinner) findViewById(R.id.cuisineSpinner);
+        ArrayAdapter<CharSequence> cuisineAdapter = ArrayAdapter.createFromResource(this, R.array.cuisine_array,
+                android.R.layout.simple_spinner_item);
+        cuisineAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cuisineSpinner.setAdapter(cuisineAdapter);
 
         Button btn = (Button)findViewById(R.id.finishButton);
 
