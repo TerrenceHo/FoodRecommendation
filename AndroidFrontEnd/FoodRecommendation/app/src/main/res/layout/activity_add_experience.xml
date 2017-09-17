@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     tools:context="com.example.nilay.foodrecommendation.AddExperience">
 
     <Button
@@ -11,6 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="52dp"
         android:text="Add Experience"
+        android:background="@color/colorAccent"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
         android:layout_marginStart="14dp"
