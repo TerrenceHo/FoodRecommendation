@@ -1,9 +1,11 @@
 package com.example.nilay.foodrecommendation;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -47,5 +49,21 @@ public class Profile extends AppCompatActivity {
                 startActivity(new Intent(Profile.this, Dashboard.class));
             }
         });
+
+//        Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parentView) {
+//
+//            }
+//
+//        });
     }
 }
+
+
+
