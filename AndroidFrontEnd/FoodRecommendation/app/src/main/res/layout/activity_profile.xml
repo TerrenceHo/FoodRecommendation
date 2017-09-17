@@ -47,7 +47,7 @@
         tools:layout_constraintRight_creator="1"
         android:layout_marginEnd="67dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="77dp"
+        android:layout_marginTop="87dp"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginRight="67dp" />
 
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="31dp"
         android:layout_marginStart="31dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="54dp"
         android:text="Maximum Distance:"
         android:textAppearance="@style/TextAppearance.AppCompat.Menu"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -72,7 +72,7 @@
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
         app:layout_constraintRight_toRightOf="@+id/priceRangeSpinner"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="52dp"
         app:layout_constraintTop_toBottomOf="@+id/priceRangeSpinner"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="@+id/priceRangeSpinner"
@@ -89,20 +89,21 @@
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginLeft="31dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="54dp"
         app:layout_constraintTop_toBottomOf="@+id/distance" />
 
     <Spinner
-        android:id="@+id/spinner6"
+        android:id="@+id/cuisineSpinner"
         android:layout_width="75dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        app:layout_constraintLeft_toLeftOf="@+id/rangeSpinner"
+        app:layout_constraintRight_toRightOf="@+id/rangeSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/rangeSpinner"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1"
-        app:layout_constraintRight_toRightOf="@+id/rangeSpinner"
-        android:layout_marginTop="41dp"
-        app:layout_constraintTop_toBottomOf="@+id/rangeSpinner"
-        app:layout_constraintLeft_toLeftOf="@+id/rangeSpinner" />
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <Button
         android:id="@+id/finishButton"
@@ -114,7 +115,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="63dp"
+        android:layout_marginBottom="65dp"
         app:layout_constraintLeft_toLeftOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
