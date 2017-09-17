@@ -24,7 +24,8 @@
         </activity>
         <activity android:name=".Profile" />
         <activity android:name=".Dashboard" />
-        <activity android:name=".Options"></activity>
+        <activity android:name=".Options" />
+        <activity android:name=".AddExperience"></activity>
     </application>
 
 </manifest>
