@@ -88,7 +88,7 @@ def recommend():
     user_id = request.json["user_id"]
     user = User.query.get(user_id)
 
-    latitude = 43.47.2285
+    latitude = 43.472285
     longitude = -80.544858
     cuisine = user.fav_cuisine
     num_dollars = user.num_dollars
