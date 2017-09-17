@@ -88,16 +88,16 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Menu"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintBottom_toTopOf="@+id/priceSpinner"
         android:layout_marginEnd="43dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="43dp" />
 
     <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:id="@+id/priceSpinner"
+        android:layout_width="111dp"
+        android:layout_height="41dp"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
@@ -105,7 +105,9 @@
         app:layout_constraintRight_toRightOf="@+id/textView5"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="@+id/textView5"
-        app:layout_constraintTop_toTopOf="@+id/editText2" />
+        app:layout_constraintTop_toTopOf="@+id/editText2"
+        app:layout_constraintHorizontal_bias="0.035"
+        app:layout_constraintVertical_bias="1.0" />
 
     <RatingBar
         android:id="@+id/ratingBar"
